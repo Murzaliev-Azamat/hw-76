@@ -3,7 +3,8 @@ import './App.css';
 import SubmissionForm, {PostMutation} from "./components/SubmissionForm/SubmissionForm";
 import Post from "./components/Post/Post";
 
-const baseUrl = 'http://146.185.154.90:8000/messages';
+// const baseUrl = 'http://146.185.154.90:8000/messages';
+const baseUrl = 'http://localhost:8000/messages';
 
 interface Message {
     _id: string,
@@ -14,7 +15,6 @@ interface Message {
 
 let myPosts: Message[] = [];
 function App() {
-
     const [posts, setPosts] = useState<Message[]>([]);
     myPosts = posts;
     useEffect(() => {
@@ -41,13 +41,18 @@ function App() {
         e.preventDefault();
         const author = post.author;
         const message = post.message;
-        const body = new URLSearchParams();
-        body.append('author', author);
-        body.append('message', message);
+
+        const body = {
+            author: author,
+            message: message,
+        }
 
         await fetch(baseUrl, {
             method: 'POST',
-            body
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(body),
         });
     };
 

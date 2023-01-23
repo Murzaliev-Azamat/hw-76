@@ -1,12 +1,14 @@
+import cors from 'cors';
 import express from 'express';
 import fileDb from "./fileDb";
-import productsRouter from "./routers/products";
+import messagesRouter from "./routers/messages";
 
 const app = express();
 const port = 8000;
 
+app.use(cors());
 app.use(express.json());
-app.use('/products', productsRouter);
+app.use('/messages', messagesRouter);
 
 const run = async () => {
   await fileDb.init();

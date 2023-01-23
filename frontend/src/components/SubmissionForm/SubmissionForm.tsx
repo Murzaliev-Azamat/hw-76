@@ -21,6 +21,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({onSubmit}) => {
         setPost(prev => ({...prev, [name]: value}))
     };
 
+
     return (
         <form onSubmit={e => onSubmit(e, post)} className="row g-2 m-1" id="form">
             <div className="col-auto">

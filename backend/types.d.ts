@@ -1,8 +1,8 @@
-export interface Product {
+export interface Message {
   id: string;
-  title: string;
-  price: number;
-  description: string;
+  author: string;
+  message: string;
+  date: string;
 }
 
-export type ProductWithoutId = Omit<Product, 'id'>;
+export type MessageWithoutId = Omit<Message, 'id', 'date'>;
