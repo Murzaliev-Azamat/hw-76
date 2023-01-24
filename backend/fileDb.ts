@@ -4,7 +4,6 @@ import {Message, MessageWithoutId} from "./types";
 
 const filename = './db.json';
 let data: Message[] = [];
-const today = new Date().toISOString();
 
 const fileDb = {
   async init() {
@@ -24,7 +23,7 @@ const fileDb = {
     const id = randomUUID();
     const message = {
       id: id,
-      date: today,
+      date: new Date().toISOString(),
       ...item,
     }
     data.push(message);

@@ -1,41 +1,42 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import SubmissionForm, {PostMutation} from "./components/SubmissionForm/SubmissionForm";
 import Post from "./components/Post/Post";
 
-// const baseUrl = 'http://146.185.154.90:8000/messages';
 const baseUrl = 'http://localhost:8000/messages';
 
 interface Message {
-    _id: string,
+    id: string,
     author: string,
     message: string,
-    datetime: string
+    date: string
 }
 
-let myPosts: Message[] = [];
 function App() {
     const [posts, setPosts] = useState<Message[]>([]);
-    myPosts = posts;
+    let url = baseUrl;
+
+    const getAllPosts = useCallback( async () => {
+        const response = await fetch(url);
+        const allPosts = await response.json();
+        setPosts(prevPosts => [...prevPosts, ...allPosts])
+    }, [])
+
     useEffect(() => {
+        void getAllPosts().catch(console.error);
+    }, [getAllPosts])
 
-        setInterval(async () => {
-            let url = baseUrl;
-            console.log('posts', myPosts);
-            if (myPosts.length > 0) {
-                const dateLastPost = myPosts.slice(-1)[0].datetime;
+    useEffect(() => {
+        setTimeout(async () => {
+            if (posts.length > 0) {
+                const dateLastPost = posts.slice(-1)[0].date;
                 url = baseUrl + '?datetime=' + dateLastPost;
+                const response = await fetch(url);
+                const newPosts = await response.json();
+                setPosts(prevPosts => [...prevPosts, ...newPosts]);
             }
-
-            const response = await fetch(url);
-            const newPosts = await response.json();
-            console.log('newPosts', newPosts);
-
-            setPosts(prevPosts => [...prevPosts, ...newPosts]);
         }, 3000);
-
-        // return () => clearInterval(interval);
-    }, []);
+    }, [posts]);
 
     const sendPost = async (e: React.FormEvent, post: PostMutation) => {
         e.preventDefault();
@@ -60,7 +61,7 @@ function App() {
         <div className="App">
             <SubmissionForm onSubmit={sendPost}/>
             {posts.map((post) => (
-                <Post key={post._id} author={post.author} message={post.message} date={post.datetime}/>
+                <Post key={post.id} author={post.author} message={post.message} date={post.date}/>
             ))}
         </div>
     );
