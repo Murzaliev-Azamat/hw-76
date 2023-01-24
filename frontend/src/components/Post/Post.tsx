@@ -1,49 +1,47 @@
-// import * as React from 'react';
-// import Card from '@mui/material/Card';
-// import CardContent from '@mui/material/CardContent';
-// import CardMedia from '@mui/material/CardMedia';
-// import Typography from '@mui/material/Typography';
-// import { Button, CardActionArea, CardActions } from '@mui/material';
-//
-// export default function MultiActionAreaCard() {
-//   return (
-//     <Card sx={{ maxWidth: 345 }}>
-//       <CardActionArea>
-//         <CardMedia
-//           component="img"
-//           height="140"
-//           image="/static/images/cards/contemplative-reptile.jpg"
-//           alt="green iguana"
-//         />
-//         <CardContent>
-//           <Typography gutterBottom variant="h5" component="div">
-//             Lizard
-//           </Typography>
-//           <Typography variant="body2" color="text.secondary">
-//             Lizards are a widespread group of squamate reptiles, with over 6,000
-//             species, ranging across all continents except Antarctica
-//           </Typography>
-//         </CardContent>
-//       </CardActionArea>
-//       <CardActions>
-//         <Button size="small" color="primary">
-//           Share
-//         </Button>
-//       </CardActions>
-//     </Card>
-//   );
-// }
-
 import React from 'react';
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import dayjs from 'dayjs';
+import {Card, CardContent, CardMedia, Typography} from "@mui/material";
 
 interface PostProps {
   author: string,
   message: string,
   date: string,
+  nowDate?: string,
 }
 
-const Post: React.FC<PostProps> = ({author,message,date}) => {
+const Post: React.FC<PostProps> = ({author,message,date, nowDate}) => {
+
+  const postFormatDate = dayjs(date).format('DD.MM.YYYY HH:mm:ss');
+  const postDay = Number(dayjs(date).format('DD'));
+  const postMonth = Number(dayjs(date).format('MM'));
+  const postYear = Number(dayjs(date).format('YYYY'));
+
+  const nowDay = Number(dayjs(nowDate).format('DD'));
+  const nowMonth = Number(dayjs(nowDate).format('MM'));
+  const nowYear = Number(dayjs(nowDate).format('YYYY'));
+
+  let infoDate = null;
+
+  if (postMonth === nowMonth && postYear === nowYear && (nowDay - postDay) === 1) {
+    infoDate = (
+      <Typography variant="subtitle1">
+        Вчера
+      </Typography>
+    )
+  } else if (postDay === nowDay && postMonth === nowMonth && postYear === nowYear) {
+    infoDate = (
+      <Typography variant="subtitle1">
+        {dayjs(date).format('HH:mm:ss')}
+      </Typography>
+    )
+  } else {
+    infoDate = (
+      <Typography variant="subtitle1">
+        {postFormatDate}
+      </Typography>
+    )
+  }
+
   return (
     <Card sx={{ maxWidth: 345, mb: 1, marginLeft: 1, bgcolor: 'lightblue'}}>
       <CardMedia>
@@ -57,33 +55,10 @@ const Post: React.FC<PostProps> = ({author,message,date}) => {
         </CardContent>
       </CardMedia>
       <CardContent sx={{ borderTop: 2, borderColor: 'white'}}>
-        <Typography variant="subtitle1">
-          {date}
-        </Typography>
+        {infoDate}
       </CardContent>
     </Card>
   );
 };
 
 export default Post;
-
-// import React from 'react';
-//
-// interface PostProps {
-//   author: string,
-//   message: string,
-//   date: string,
-// }
-//
-// const Post: React.FC<PostProps> = ({author,message,date}) => {
-//   return (
-//     <div className = 'alert alert-info m-2 col-5'>
-//       <h4 className = 'alert-heading'>{author}</h4>
-//       <p>{message}</p>
-//       <hr/>
-//       <p>{date}</p>
-//     </div>
-//   );
-// };
-//
-// export default Post;

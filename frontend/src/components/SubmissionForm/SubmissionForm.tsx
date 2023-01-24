@@ -32,6 +32,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({onSubmit}) => {
                     placeholder="Введите ваше имя"
                     value={post.author}
                     onChange={onTextFieldChange}
+                    required
                 />
             </div>
             <div className="col-auto">
@@ -42,6 +43,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({onSubmit}) => {
                     placeholder="Введите ваше сообщение"
                     value={post.message}
                     onChange={onTextFieldChange}
+                    required
                 />
             </div>
             <div className="col-auto">

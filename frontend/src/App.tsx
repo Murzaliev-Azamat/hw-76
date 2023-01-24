@@ -14,6 +14,7 @@ interface Message {
 
 function App() {
     const [posts, setPosts] = useState<Message[]>([]);
+    const [nowDate, setNowDate] = useState<string>();
     let url = baseUrl;
 
     const getAllPosts = useCallback( async () => {
@@ -35,6 +36,7 @@ function App() {
                 const newPosts = await response.json();
                 setPosts(prevPosts => [...prevPosts, ...newPosts]);
             }
+            setNowDate(new Date().toISOString());
         }, 3000);
     }, [posts]);
 
@@ -61,8 +63,8 @@ function App() {
         <div className="App">
             <SubmissionForm onSubmit={sendPost}/>
             {posts.map((post) => (
-                <Post key={post.id} author={post.author} message={post.message} date={post.date}/>
-            ))}
+                <Post key={post.id} author={post.author} message={post.message} date={post.date} nowDate={nowDate}/>
+            )).reverse()}
         </div>
     );
 }
